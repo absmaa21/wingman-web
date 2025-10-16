@@ -2,8 +2,8 @@ import {Typography} from "@mui/material";
 
 function Introduction() {
   return (<>
-    <Typography variant={'h4'}>
-      Welcome to the Valorant API Playground (unoffical)
+    <Typography variant={'h4'} component={'h1'}>
+      Welcome to wingman!
     </Typography>
   </>);
 }
