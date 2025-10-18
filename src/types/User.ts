@@ -5,11 +5,23 @@ import type {
 } from "./valapi/data.ts";
 
 export type User = {
+  /**
+   * Legacy username which is also used for login in Riot Sign On
+   */
   username: string,
+  /**
+   * Current username of the User
+   */
   game_name: string,
+  /**
+   * Current tag of the User
+   */
   tag_line: string,
   puuid: string,
   shard: string,
+  /**
+   * Currently just the same as shard
+   */
   region: string,
   accountLvl: number,
   accountXp: number,

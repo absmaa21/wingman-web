@@ -1,12 +1,14 @@
-import {Fab, type SxProps} from "@mui/material";
+import {Fab, type SxProps, Tooltip} from "@mui/material";
 import useUser from "../hooks/useUser.ts";
 import {useLocation, useNavigate} from "react-router";
 import type {PageProps} from "./Layout.tsx";
+import useDevice from "../hooks/useDevice.ts";
 
 function UserAvatar({page, sx, size}: { page: PageProps, sx?: SxProps, size?: number }) {
   const {user} = useUser()
+  const {isMobile} = useDevice()
   const nav = useNavigate()
-  const playercard: string = 'https://media.valorant-api.com/playercards/95d3bbd1-4cf6-543b-0237-ba876d886210/displayicon.png'
+  const playercard: string = `https://media.valorant-api.com/playercards/${user!.identity.PlayerCardID}/displayicon.png`
   const isActive: boolean = useLocation().pathname == page.href
   const fabSize: number = size ?? 60
 
@@ -17,8 +19,10 @@ function UserAvatar({page, sx, size}: { page: PageProps, sx?: SxProps, size?: nu
       sx={{overflow: 'hidden', height: fabSize, width: fabSize, ...sx}}
     >
       {user ? (
-        <img src={playercard} alt={page.title} loading={'lazy'}
-             style={{width: isActive ? fabSize - 4 : fabSize, borderRadius: 999, transition: '.2s ease-in'}}/>
+        <Tooltip title={user.username} placement={'left'} disableHoverListener={isMobile} arrow>
+          <img src={playercard} alt={page.title} loading={'lazy'}
+               style={{width: isActive ? fabSize - 4 : fabSize, borderRadius: 999, transition: '.2s ease-in'}}/>
+        </Tooltip>
       ) : page.icon}
     </Fab>
   )
