@@ -2,7 +2,6 @@ import {
   Autocomplete,
   Box,
   Button,
-  CircularProgress,
   Container, LinearProgress,
   MenuItem,
   Paper,
@@ -11,7 +10,6 @@ import {
   Typography
 } from "@mui/material";
 import {useEffect, useState} from "react";
-import * as React from "react";
 import { Send } from "@mui/icons-material";
 import {Prism} from "react-syntax-highlighter";
 import useUser from "../hooks/useUser.ts";
@@ -35,7 +33,6 @@ function Endpoint() {
   async function fetchUrl() {
     if (!user) return
 
-    console.info(fetchOptions.url)
     const url = replaceUrlValues(fetchOptions.url, user)
     if (!url) {
       setUrlError('Some params in url were invalid.')
@@ -43,7 +40,7 @@ function Endpoint() {
     }
 
     setResponseIsLoading(true)
-    const res = await fetch(url, {method: fetchOptions.method, body: fetchOptions.method == 'POST' ? jsonInput : null, headers: defaultHeaders(user)})
+    const res = await fetch(url, {method: fetchOptions.method, body: ['POST', 'PUT'].includes(fetchOptions.method) ? jsonInput : null, headers: defaultHeaders(user)})
     setResponse(res)
     setResponseData(await res.json())
     setResponseIsLoading(false)
@@ -69,10 +66,6 @@ function Endpoint() {
 
   return (
     <Container>
-      <Typography variant={'h4'} component={'h1'} align={'center'} mb={2}>
-        {'Testing Endpoint'}
-      </Typography>
-
       <Box sx={{display: 'flex', flexDirection: 'row', gap: 1}}>
         <Select
           value={fetchOptions.method}
@@ -117,9 +110,9 @@ function Endpoint() {
         sx={{ mb: 2 }}
       />
 
-      <Typography variant={'h6'} sx={{textAlign: 'center', mt: 2}}>
-        Following Variables will be replaced by their value automatically.
-      </Typography>
+      {urlParams.length > 0 && <Typography variant={'h6'} sx={{textAlign: 'center', mt: 2}}>
+          Following Variables will be replaced by their value automatically.
+      </Typography>}
       {urlParams.map(p => <p key={p}>{p}</p>)}
 
       <Typography variant={'h6'} sx={{textAlign: 'center', mt: 2}}>
@@ -127,7 +120,7 @@ function Endpoint() {
       </Typography>
       <Paper elevation={1} sx={{ p: 1, overflowX: 'auto', textAlign: 'center' }}>
         {responseIsLoading ? <LinearProgress/> : <>
-          <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Box sx={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
             <Typography variant={'caption'}>
               {response?.url}
             </Typography>
