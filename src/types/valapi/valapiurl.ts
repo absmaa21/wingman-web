@@ -15,6 +15,9 @@ export enum ValApiUrl {
   NAME_SERVICE = "https://pd.{shard}.a.pvp.net/name-service/v2/players",
 
   // Party Endpoints
+  PARTY = "https://glz-{region}-1.{shard}.a.pvp.net/parties/v1/parties/{party_id}",
+  PARTY_PLAYER = "https://glz-{region}-1.{shard}.a.pvp.net/parties/v1/players/{puuid}",
+  PARTY_ACCESSIBILITY = "https://glz-{region}-1.{shard}.a.pvp.net/parties/v1/parties/{party_id}/accessibility",
 
   // Store Endpoints
   PRICES = "https://pd.{shard}.a.pvp.net/store/v1/offers/",

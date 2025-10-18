@@ -56,9 +56,13 @@ export function replaceUrlValues(url: ValApiUrl | string, user: User, custom_par
   let newUrl: string = url
   url.match(paramRegex)?.forEach(param => {
     const cleanParam: string = param.substring(1, param.length-1)
-    if ([...Object.keys(user), ...Object.keys(custom_params ?? {})].includes(cleanParam)) {
+    if (Object.keys(user).includes(cleanParam)) {
       const split = newUrl.split(param)
       newUrl = split[0] + String(user[cleanParam as keyof User]) + split[1]
+    } else if (custom_params && Object.keys(custom_params).includes(cleanParam)) {
+      const split = newUrl.split(param)
+      // @ts-ignore
+      newUrl = split[0] + String(custom_params[cleanParam]) + split[1]
     } else {
       console.error(`Param "${cleanParam}" does not exist in User or custom_params!`)
       return null

@@ -1,4 +1,4 @@
-import {Box, TextField, Typography} from "@mui/material";
+import {Container, TextField, Typography} from "@mui/material";
 import RsoPopupButton from "../components/RsoPopupButton.tsx";
 import * as React from "react";
 import useUser from "../hooks/useUser.ts";
@@ -26,7 +26,7 @@ function ValAuth() {
   }
 
   return (
-    <Box>
+    <Container>
       <RsoPopupButton />
       <Typography>
         After login, copy the whole URL and paste it in the field below
@@ -35,7 +35,7 @@ function ValAuth() {
       <Typography>
         {extractFeedback}
       </Typography>
-    </Box>
+    </Container>
   );
 }
 

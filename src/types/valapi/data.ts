@@ -1473,36 +1473,38 @@ export type PartyPlayerResponse = {
   };
 };
 
+export type PartyMember = {
+  Subject: string;
+  CompetitiveTier: number;
+  PlayerIdentity: {
+    Subject: string;
+    PlayerCardID: string;
+    PlayerTitleID: string;
+    AccountLevel: number;
+    PreferredLevelBorderID: string | "";
+    Incognito: boolean;
+    HideAccountLevel: boolean;
+  };
+  SeasonalBadgeInfo: null;
+  IsOwner?: boolean | undefined;
+  QueueEligibleRemainingAccountLevels: number;
+  Pings: {
+    Ping: number;
+    GamePodID: string;
+  }[];
+  IsReady: boolean;
+  IsModerator: boolean;
+  UseBroadcastHUD: boolean;
+  PlatformType: "PC";
+}
+
 export type PartyResponse = {
   ID: string;
   MUCName: string;
   VoiceRoomID: string;
   Version: number;
   ClientVersion: string;
-  Members: {
-    Subject: string;
-    CompetitiveTier: number;
-    PlayerIdentity: {
-      Subject: string;
-      PlayerCardID: string;
-      PlayerTitleID: string;
-      AccountLevel: number;
-      PreferredLevelBorderID: string | "";
-      Incognito: boolean;
-      HideAccountLevel: boolean;
-    };
-    SeasonalBadgeInfo: null;
-    IsOwner?: boolean | undefined;
-    QueueEligibleRemainingAccountLevels: number;
-    Pings: {
-      Ping: number;
-      GamePodID: string;
-    }[];
-    IsReady: boolean;
-    IsModerator: boolean;
-    UseBroadcastHUD: boolean;
-    PlatformType: "PC";
-  }[];
+  Members: PartyMember[];
   State: string;
   PreviousState: string;
   StateTransitionReason: string;

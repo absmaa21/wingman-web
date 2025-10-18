@@ -1,0 +1,111 @@
+/* container — controls overall sizing and spike pseudo-elements */
+.pc-wrapper {
+    position: relative;
+    display: inline-block;
+    /* allow the pseudo elements to be visible outside the card */
+    overflow: visible;
+    --card-bg: linear-gradient(180deg, #162a39 0%, #08121a 100%);
+    --card-border: #7a9fb3;
+    --info-bg: rgba(0, 0, 0, 0.45);
+    --spike-height: 32px; /* how tall the spike is */
+    --spike-width: 64px;  /* width at the base */
+}
+
+/* border spike: behind the card (bigger, creates the border effect) */
+.pc-wrapper::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(-1 * var(--spike-height) - 2px); /* 2px extra to show border */
+    width: 0;
+    height: 0;
+    border-left: calc(var(--spike-width) / 2) solid transparent;
+    border-right: calc(var(--spike-width) / 2) solid transparent;
+    border-top: calc(var(--spike-height) + 2px) solid var(--card-border);
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* fill spike: sits on top of the border spike, same color as card background */
+.pc-wrapper::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: calc(-1 * var(--spike-height)); /* sits slightly above border spike bottom */
+    width: 0;
+    height: 0;
+    border-left: calc(var(--spike-width) / 2 - 6px) solid transparent; /* inset so border shows */
+    border-right: calc(var(--spike-width) / 2 - 6px) solid transparent;
+    border-top: var(--spike-height) solid #0b1a28; /* fallback solid, will be covered by .pc-card background */
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* The actual card element with rounded corners and border */
+.pc-card {
+    position: absolute;
+    inset: 0; /* fill wrapper */
+    border-radius: 16px;
+    overflow: hidden;
+    border: 3px solid var(--card-border);
+    background: var(--card-bg);
+    box-shadow: 0 6px 18px rgba(3, 9, 14, 0.6), inset 0 2px 6px rgba(255,255,255,0.02);
+    display: flex;
+    flex-direction: column;
+    z-index: 3; /* above border spike but below fill spike? We set pc-wrapper::after z-index 2 so the card is above it */
+}
+
+/* image area */
+.pc-image {
+    flex: 1;
+    min-height: 0;
+}
+
+.pc-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* info area at bottom */
+.pc-info {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px;
+    background: var(--info-bg);
+    text-align: center;
+}
+
+/* small status */
+.pc-status {
+    font-size: 12px;
+    color: #dfeff6;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+/* name bar look */
+.pc-name {
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    min-width: 80%;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.06);
+}
+
+/* subtitle text below name */
+.pc-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.85);
+}
