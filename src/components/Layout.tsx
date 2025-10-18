@@ -1,4 +1,5 @@
 import {
+  Avatar,
   BottomNavigation,
   BottomNavigationAction,
   Box,
@@ -28,6 +29,7 @@ const pages: PageProps[] = [
 ]
 
 function DesktopNavbar() {
+  const nav = useNavigate()
 
   return (
     <Paper elevation={1} sx={{
@@ -39,7 +41,9 @@ function DesktopNavbar() {
       justifyContent: 'space-between',
       px: 2,
     }}>
-      <></>
+      <img src={"src/assets/icon.png"} alt={'wingman-logo'} onClick={() => nav('/')}
+           style={{width: 48, height: 48, marginBottom: 'auto', marginTop: 'auto', cursor: 'pointer'}}
+      />
 
       <Box sx={{display: 'flex', flexDirection: 'row'}}>
         {pages.filter(p => !p.isSpecial).map(p => (
@@ -89,7 +93,7 @@ function Layout({children}: { children: ReactNode }) {
       {!isMobile && <DesktopNavbar/>}
 
       <Container
-        component={'main'}
+        component={'main'} maxWidth={false}
         sx={{flexGrow: 1, bgcolor: 'background.default', p: 3}}
       >
         {children}
