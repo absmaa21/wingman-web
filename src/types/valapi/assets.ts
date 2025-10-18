@@ -277,7 +277,7 @@ export type ValorantAssetsSpray = {
   }[];
 }
 
-type ValorantAssets = {
+export type ValorantAssets = {
   agents: ValorantAssetsAgent[],
   buddies: ValorantAssetsBuddie[],
   bundles: ValorantAssetsBundle[],
@@ -290,5 +290,3 @@ type ValorantAssets = {
   weapons: ValorantAssetsWeapon[],
   version: ValorantAssetsVersion,
 }
-
-export default ValorantAssets

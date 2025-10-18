@@ -6,7 +6,7 @@ export function defaultHeaders(user: User): HeadersInit {
     'Content-Type': 'application/json',
     'Authorization': `Bearer ${user.access_token}`,
     'X-Riot-ClientPlatform': 'ew0KCSJwbGF0Zm9ybVR5cGUiOiAiUEMiLA0KCSJwbGF0Zm9ybU9TIjogIldpbmRvd3MiLA0KCSJwbGF0Zm9ybU9TVmVyc2lvbiI6ICIxMC4wLjE5MDQyLjEuMjU2LjY0Yml0IiwNCgkicGxhdGZvcm1DaGlwc2V0IjogIlVua25vd24iDQp9',
-    'X-Riot-ClientVersion': 'release-09.02-shipping-20-2703179',
+    'X-Riot-ClientVersion': user.riotClientVersion,
   }
   return user.entitlement_token ? {...headers, 'X-Riot-Entitlements-JWT': user.entitlement_token} : headers
 }
@@ -71,5 +71,6 @@ export function replaceUrlValues(url: ValApiUrl | string, user: User, custom_par
 export async function FetchWrapper<T>(url: string, options?: RequestInit) {
   const response = await fetch(url, options)
   if (!response.ok) throw new Error(`Could not fetch '${url}' [${response.status}]: ${response.statusText}`)
-  return await response.json() as T
+  const json = await response.json()
+  return json['data'] as T ?? json as T
 }
