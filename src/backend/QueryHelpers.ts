@@ -10,8 +10,17 @@ export function defaultHeaders(user: User): HeadersInit {
   return user.entitlement_token ? {...headers, 'X-Riot-Entitlements-JWT': user.entitlement_token} : headers
 }
 
-export async function ValApiWrapper<T>(url: ValApiUrl | string, user: User, custom_options?: RequestInit, name?: string, use_min_header?: boolean) {
-  const newUrl = replaceUrlValues(url, user)
+interface ValApiWrapperOptions {
+  url: ValApiUrl | string,
+  user: User,
+  custom_options?: RequestInit,
+  name?: string,
+  use_min_header?: boolean,
+  custom_params?: object,
+}
+
+export async function ValApiWrapper<T>({url, user, custom_options, name, use_min_header, custom_params}: ValApiWrapperOptions) {
+  const newUrl = replaceUrlValues(url, user, custom_params)
   if (!newUrl) throw Error('Sanitizing Url has failed, skip fetch.')
   url = newUrl
 
@@ -37,20 +46,20 @@ export async function ValApiWrapper<T>(url: ValApiUrl | string, user: User, cust
   }
 
   console.info(`${label} fetched in ${duration.toFixed(2)}ms`)
-  return response.json() as T
+  return await response.json() as T
 }
 
 const paramRegex = /\{(.*?)\}/g
 
-export function replaceUrlValues(url: ValApiUrl | string, user: User): string | null {
+export function replaceUrlValues(url: ValApiUrl | string, user: User, custom_params?: object): string | null {
   let newUrl: string = url
   url.match(paramRegex)?.map(param => {
     const cleanParam: string = param.substring(1, param.length-1)
-    if (Object.keys(user).includes(cleanParam)) {
+    if ([...Object.keys(user), ...Object.keys(custom_params ?? {})].includes(cleanParam)) {
       const split = newUrl.split(param)
       newUrl = split[0] + String(user[cleanParam as keyof User]) + split[1]
     } else {
-      console.error(`Param "${cleanParam}" does not exist in User!`)
+      console.error(`Param "${cleanParam}" does not exist in User or custom_params!`)
       return null
     }
   })

@@ -4,6 +4,7 @@ interface User {
   tag_line: string,
   puuid: string,
   shard: string,
+  region: string,
   accountLvl: number,
   accountXp: number,
 

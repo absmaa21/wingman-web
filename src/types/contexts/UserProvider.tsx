@@ -43,6 +43,7 @@ export function UserProvider({children}: UserProviderProps) {
       tag_line: itDecrypted.acct.tag_line,
       puuid: atDecrypted.sub,
       shard: atDecrypted.pp.c,
+      region: atDecrypted.pp.c,
       accountLvl: -1,
       accountXp: -1,
       entitlement_token: '',
@@ -56,7 +57,9 @@ export function UserProvider({children}: UserProviderProps) {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${newUser.access_token}`,
     }
-    const entitlementResponse = await ValApiWrapper<EntitlementResponse>(ValApiUrl.ENTITLEMENT, newUser, {headers, method: 'POST'})
+    const entitlementResponse = await ValApiWrapper<EntitlementResponse>({
+      url: ValApiUrl.ENTITLEMENT, user: newUser, custom_options: {headers, method: 'POST'}
+    })
     newUser.entitlement_token = entitlementResponse.entitlements_token
 
     setUser(newUser)

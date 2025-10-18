@@ -4,6 +4,7 @@ import ValAuth from "./screens/ValAuth.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import Layout from "./components/Layout.tsx";
 import PageNotFound from "./screens/PageNotFound.tsx";
+import Dashboard from "./screens/Dashboard.tsx";
 
 function App() {
 
@@ -11,7 +12,8 @@ function App() {
     <Layout>
       <Routes>
         <Route path={'*'} element={<PageNotFound/>} />
-        <Route index element={<Introduction/>}/>
+        <Route index element={<Dashboard/>}/>
+        <Route path={'/welcome'} element={<Introduction/>} />
         <Route path={'/val-auth'} element={<ValAuth/>}/>
         <Route element={<ProtectedRoute/>}>
 

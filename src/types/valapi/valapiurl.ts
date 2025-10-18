@@ -44,6 +44,9 @@ export enum ValApiUrl {
   // Authentication Endpoints
   ENTITLEMENT = "https://entitlements.auth.riotgames.com/api/token/v1",
   PLAYER_INFO = "https://auth.riotgames.com/userinfo",
+
+  // Other Endpoints
+  SESSION = "https://glz-eu-1.{shard}.a.pvp.net/session/v1/sessions/{puuid}"
 }
 
 export function ValApiUrlKeyToText(key: ValApiUrl | string): string {

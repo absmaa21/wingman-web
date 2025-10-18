@@ -94,6 +94,7 @@ export type SetPlayerLoadoutBody = {
 
 export type SetPlayerLoadoutResponse = PlayerLoadoutResponse
 
+// @ts-ignore
 export enum QueueSkill {
   COMPETITIVE = 'competitive',
   DEATHMATCH = 'deathmatch',
@@ -445,6 +446,7 @@ export type MatchDetailsPlayer = {
   } | undefined;
 }
 
+// @ts-ignore
 export enum ItemType {
   AGENTS = "01bb38e1-da47-4e6a-9b3d-945fe4655707",
   CONTRACTS = "f85cb6f7-33e5-4dc8-b609-ec7212301948",
@@ -491,6 +493,7 @@ export type WalletResponse = {
   };
 };
 
+// @ts-ignore
 export enum Balance {
   VP = '85ad13f7-3d1b-5128-9eb2-7cd8ee0b5741',
   KC = '85ca954a-41f2-ce94-9b45-8ca3dd39a00d',
