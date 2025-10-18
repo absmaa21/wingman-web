@@ -1,5 +1,4 @@
 import {
-  Avatar,
   BottomNavigation,
   BottomNavigationAction,
   Box,
