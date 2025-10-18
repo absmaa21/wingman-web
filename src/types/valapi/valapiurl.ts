@@ -1,5 +1,5 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-expect-error
+
+// @ts-ignore
 export enum ValApiUrl {
   // PVP Endpoints
   FETCH_CONTENT = "https://shared.{shard}.a.pvp.net/content-service/v3/content",
