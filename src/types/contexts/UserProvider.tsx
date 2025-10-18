@@ -4,6 +4,7 @@ import type {accessTokenDecrypt, idTokenDecrypt} from "../valapi/auth";
 import {ValApiUrl} from "../valapi/valapiurl.ts";
 import {ValApiWrapper} from "../../backend/QueryHelpers.ts";
 import type {EntitlementResponse} from "../valapi/data.ts";
+import AppStorage from "../../backend/AppStorage.ts";
 
 interface UserProviderProps {
   children: ReactNode,
@@ -65,8 +66,22 @@ export function UserProvider({children}: UserProviderProps) {
   function checkUser() {
     if (user) {
       const user_expires_in: number = user.expires_at - Date.now()
-      if (user_expires_in > 10) return
+      if (user_expires_in > 1) {
+        AppStorage.setItem('user', JSON.stringify(user))
+        return
+      }
+      console.debug('User is expired! Logout ...')
+      logout()
+    } else {
+      // Try to load user
+      const loaded_user = AppStorage.getItem("user")
+      if (loaded_user) setUser(JSON.parse(loaded_user))
     }
+  }
+
+  function logout() {
+    AppStorage.removeItem("user")
+    setUser(undefined)
   }
 
   useEffect(checkUser, [user])

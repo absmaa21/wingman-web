@@ -1,9 +1,8 @@
 import {
-  Avatar,
   BottomNavigation,
   BottomNavigationAction,
   Box,
-  Container, Fab,
+  Container,
   Paper,
   Typography,
 } from "@mui/material";
@@ -11,9 +10,9 @@ import type {ReactNode} from "react";
 import {Link, type To, useLocation, useNavigate} from "react-router";
 import useDevice from "../hooks/useDevice.ts";
 import {AirlineStops, Collections, Home, Login, Storefront} from "@mui/icons-material";
-import useUser from "../hooks/useUser.ts";
+import UserAvatar from "./UserAvatar.tsx";
 
-interface PageProps {
+export interface PageProps {
   href: To,
   title: string,
   icon?: ReactNode,
@@ -29,11 +28,6 @@ const pages: PageProps[] = [
 ]
 
 function DesktopNavbar() {
-  const {user} = useUser()
-  const nav = useNavigate()
-  const playercard: string = 'https://media.valorant-api.com/playercards/95d3bbd1-4cf6-543b-0237-ba876d886210/displayicon.png'
-  const isActive: boolean = useLocation().pathname == pages[2].href
-  const fabSize: number = 48
 
   return (
     <Paper elevation={1} sx={{
@@ -49,12 +43,12 @@ function DesktopNavbar() {
 
       <Box sx={{display: 'flex', flexDirection: 'row'}}>
         {pages.filter(p => !p.isSpecial).map(p => (
-          <Link to={p.href} style={{textDecoration: 'none'}}>
+          <Link key={p.title} to={p.href} style={{textDecoration: 'none'}}>
             <Typography variant={'h6'} sx={{
               height: '100%',
               px: 1,
               alignContent: 'center',
-              color: useLocation().pathname == p.href ? 'text.primary' : 'text.secondary'
+              color: useLocation().pathname == p.href ? 'primary.main' : 'text.secondary'
             }}>
               {p.title}
             </Typography>
@@ -62,37 +56,8 @@ function DesktopNavbar() {
         ))}
       </Box>
 
-      <Avatar
-        sx={{width: fabSize, height: fabSize, my: 'auto', cursor: 'pointer'}}
-        onClick={() => nav(user ? pages[2].href : 'val-auth')}
-      >
-        {user ? (
-          <img src={playercard} alt={pages[2].title} loading={'lazy'}
-               style={{width: isActive ? fabSize - 4 : fabSize, borderRadius: 999, transition: '.2s ease-in'}}/>
-        ) : pages[2].icon}
-      </Avatar>
+      <UserAvatar page={pages[2]} size={48} sx={{my: 'auto'}}/>
     </Paper>
-  )
-}
-
-function MobileAvatar({p}: { p: PageProps }) {
-  const {user} = useUser()
-  const nav = useNavigate()
-  const playercard: string = 'https://media.valorant-api.com/playercards/95d3bbd1-4cf6-543b-0237-ba876d886210/displayicon.png'
-  const isActive: boolean = useLocation().pathname == p.href
-  const fabSize: number = 60
-
-  return (
-    <Fab
-      color={isActive ? 'primary' : 'default'}
-      onClick={() => nav(user ? p.href : 'val-auth')}
-      sx={{bottom: fabSize / 2, overflow: 'hidden', height: fabSize, width: fabSize}}
-    >
-      {user ? (
-        <img src={playercard} alt={p.title} loading={'lazy'}
-             style={{width: isActive ? fabSize - 4 : fabSize, borderRadius: 999, transition: '.2s ease-in'}}/>
-      ) : p.icon}
-    </Fab>
   )
 }
 
@@ -107,8 +72,8 @@ function MobileNavbar() {
           nav(newValue)
         }}
       >
-        {pages.map(p => p.isSpecial ? <MobileAvatar p={p}/> : (
-          <BottomNavigationAction label={p.title} icon={p.icon} value={p.href}/>
+        {pages.map(p => p.isSpecial ? <UserAvatar key={p.title} page={p} sx={{bottom: '50%'}}/> : (
+          <BottomNavigationAction key={p.title} label={p.title} icon={p.icon} value={p.href}/>
         ))}
       </BottomNavigation>
     </Paper>

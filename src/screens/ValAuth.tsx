@@ -27,10 +27,7 @@ function ValAuth() {
 
   return (
     <Box>
-      <Typography>
-        A window with the Riot Sign On website should be open now.
-      </Typography>
-      <RsoPopupButton text={'If not press me'} />
+      <RsoPopupButton />
       <Typography>
         After login, copy the whole URL and paste it in the field below
       </Typography>
