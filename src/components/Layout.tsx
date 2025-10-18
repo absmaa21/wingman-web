@@ -15,7 +15,7 @@ import UserAvatar from "./UserAvatar.tsx";
 export interface PageProps {
   href: To,
   title: string,
-  icon?: ReactNode,
+  icon: ReactNode,
   isSpecial?: boolean,
 }
 
