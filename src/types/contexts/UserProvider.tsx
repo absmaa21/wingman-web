@@ -2,9 +2,11 @@ import {type ReactNode, useEffect, useState} from "react";
 import {UserContext} from "./Contexts.ts";
 import type {accessTokenDecrypt, idTokenDecrypt} from "../valapi/auth";
 import {ValApiUrl} from "../valapi/valapiurl.ts";
-import {ValApiWrapper} from "../../backend/QueryHelpers.ts";
-import type {EntitlementResponse} from "../valapi/data.ts";
+import {FetchWrapper, ValApiWrapper} from "../../backend/QueryHelpers.ts";
+import type {AccountXPResponse, EntitlementResponse, PlayerLoadoutResponse, WalletResponse} from "../valapi/data.ts";
 import AppStorage from "../../backend/AppStorage.ts";
+import type {ValorantAssetsVersion} from "../valapi/assets.ts";
+import {emptyUser, type User} from "../User.ts";
 
 interface UserProviderProps {
   children: ReactNode,
@@ -38,15 +40,13 @@ export function UserProvider({children}: UserProviderProps) {
     // todo: validate decryptions with tests
 
     const newUser: User = {
+      ...emptyUser,
       username: itDecrypted.lol[0].uname,
       game_name: itDecrypted.acct.game_name,
       tag_line: itDecrypted.acct.tag_line,
       puuid: atDecrypted.sub,
       shard: atDecrypted.pp.c,
       region: atDecrypted.pp.c,
-      accountLvl: -1,
-      accountXp: -1,
-      entitlement_token: '',
       access_token: accessToken,
       id_token: idToken,
       expires_at: Date.now() + parseInt(expiresIn) * 1000,
@@ -62,11 +62,30 @@ export function UserProvider({children}: UserProviderProps) {
     })
     newUser.entitlement_token = entitlementResponse.entitlements_token
 
-    setUser(newUser)
+    setUser(await hydrateUser(newUser))
     return true
   }
 
-  function checkUser() {
+  async function hydrateUser(newUser: User): Promise<User> {
+    const version = await FetchWrapper<ValorantAssetsVersion>('https://valorant-api.com/v1/version')
+    newUser = {...newUser, ...version}
+
+    const loadout = await ValApiWrapper<PlayerLoadoutResponse>({url: ValApiUrl.PLAYER_LOADOUT, user: newUser})
+    newUser.guns = loadout.Guns
+    newUser.sprays = loadout.Sprays
+    newUser.identity = loadout.Identity
+
+    const wallet = await ValApiWrapper<WalletResponse>({url: ValApiUrl.WALLET, user: newUser})
+    newUser.wallet = wallet.Balances
+
+    const accountXp = await ValApiWrapper<AccountXPResponse>({url: ValApiUrl.ACCOUNT_XP, user: newUser})
+    newUser.accountLvl = accountXp.Progress.Level
+    newUser.accountXp = accountXp.Progress.XP
+
+    return newUser
+  }
+
+  function validateUser() {
     if (user) {
       const user_expires_in: number = user.expires_at - Date.now()
       if (user_expires_in > 1) {
@@ -78,7 +97,10 @@ export function UserProvider({children}: UserProviderProps) {
     } else {
       // Try to load user
       const loaded_user = AppStorage.getItem("user")
-      if (loaded_user) setUser(JSON.parse(loaded_user))
+      if (loaded_user) {
+        const newUser: User = {...emptyUser, ...JSON.parse(loaded_user)}
+        setUser(newUser)
+      }
     }
   }
 
@@ -87,7 +109,7 @@ export function UserProvider({children}: UserProviderProps) {
     setUser(undefined)
   }
 
-  useEffect(checkUser, [user])
+  useEffect(validateUser, [user])
 
   return (
     <UserContext value={{user, extractInformationsFromUrl}}>

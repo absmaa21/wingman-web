@@ -1,4 +1,5 @@
 import type {ValApiUrl} from "../types/valapi/valapiurl.ts";
+import type {User} from "../types/User.ts";
 
 export function defaultHeaders(user: User): HeadersInit {
   const headers: HeadersInit = {
@@ -36,7 +37,7 @@ export async function ValApiWrapper<T>({url, user, custom_options, name, use_min
     body: custom_options?.method === 'POST' ? custom_options?.body : null
   }
 
-  console.info(`Trying to fetch ${label}`)
+  console.debug(`Trying to fetch ${label}`)
   const response = await fetch(url, init)
 
   const duration = performance.now() - start
@@ -45,7 +46,7 @@ export async function ValApiWrapper<T>({url, user, custom_options, name, use_min
     throw new Error(`Error while fetching ${label}: ${await response.text()}`)
   }
 
-  console.info(`${label} fetched in ${duration.toFixed(2)}ms`)
+  console.debug(`${label} fetched in ${duration.toFixed(2)}ms`)
   return await response.json() as T
 }
 
@@ -64,4 +65,11 @@ export function replaceUrlValues(url: ValApiUrl | string, user: User, custom_par
     }
   })
   return newUrl
+}
+
+
+export async function FetchWrapper<T>(url: string, options?: RequestInit) {
+  const response = await fetch(url, options)
+  if (!response.ok) throw new Error(`Could not fetch '${url}' [${response.status}]: ${response.statusText}`)
+  return await response.json() as T
 }

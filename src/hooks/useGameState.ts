@@ -4,22 +4,23 @@ import {type QueryObserverResult, type RefetchOptions, useQuery} from "@tanstack
 import {ValApiWrapper} from "../backend/QueryHelpers.ts";
 import type {SessionResponse} from "../types/valapi/data.ts";
 import {ValApiUrl} from "../types/valapi/valapiurl.ts";
+import type {User} from "../types/User.ts";
 
 interface Session {
   state: SessionState | string,
   refetch: (options?: RefetchOptions) => Promise<QueryObserverResult<SessionResponse, Error>>,
 }
 
-export function useGameState(user: User, isFocused: boolean = true): Session {
+export function useGameState(user: User | undefined, isFocused: boolean = true): Session {
 
   const [sessionState, setSessionState] = useState<SessionState | string>(SessionState.CLOSED)
   const [fetchMultiplier, setFetchMultiplier] = useState<number>(1)
 
   const SessionQuery = useQuery({
     queryKey: ['val-session'],
-    queryFn: () => ValApiWrapper<SessionResponse>({url: ValApiUrl.SESSION, user}),
+    queryFn: () => ValApiWrapper<SessionResponse>({url: ValApiUrl.SESSION, user: user!}),
     refetchInterval: 1000 * 60 * fetchMultiplier,
-    enabled: isFocused,
+    enabled: user && isFocused,
   })
 
   useEffect(() => {

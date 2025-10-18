@@ -6,9 +6,9 @@ import {Typography} from "@mui/material";
 function Dashboard() {
 
   const {user} = useUser()
-  if (!user) return <Introduction/>
-
   const Session = useGameState(user)
+
+  if (!user) return <Introduction/>
 
   /*
   const PreGamePlayerQuery = useQuery({

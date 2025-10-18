@@ -1,4 +1,5 @@
 import {createContext} from "react";
+import type {User} from "../User.ts";
 
 interface UserContextProps {
   user: User | undefined,
