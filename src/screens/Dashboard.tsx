@@ -2,9 +2,13 @@ import useUser from "../hooks/useUser.ts";
 import Introduction from "./Introduction.tsx";
 import {useGameState} from "../hooks/useGameState.ts";
 import {Typography} from "@mui/material";
+import {SessionState} from "../types/constants/Enums.ts";
+import DashboardMenus from "../components/dashboard/DashboardMenus.tsx";
+import useDevice from "../hooks/useDevice.ts";
 
 function Dashboard() {
 
+  const {isMobile} = useDevice()
   const {user} = useUser()
   const Session = useGameState(user)
 
@@ -25,11 +29,14 @@ function Dashboard() {
   })
    */
 
-  return (<>
+  if (Session.state == SessionState.MENUS)
+    return <DashboardMenus user={user} compact={isMobile} />
+
+  return (
     <Typography>
-      Current Session: {Session.state}
+      Current Session State: {Session.state}
     </Typography>
-  </>);
+  );
 }
 
 export default Dashboard;

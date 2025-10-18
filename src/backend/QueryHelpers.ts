@@ -54,7 +54,7 @@ const paramRegex = /\{(.*?)\}/g
 
 export function replaceUrlValues(url: ValApiUrl | string, user: User, custom_params?: object): string | null {
   let newUrl: string = url
-  url.match(paramRegex)?.map(param => {
+  url.match(paramRegex)?.forEach(param => {
     const cleanParam: string = param.substring(1, param.length-1)
     if ([...Object.keys(user), ...Object.keys(custom_params ?? {})].includes(cleanParam)) {
       const split = newUrl.split(param)

@@ -8,7 +8,7 @@ function UserAvatar({page, sx, size}: { page: PageProps, sx?: SxProps, size?: nu
   const {user} = useUser()
   const {isMobile} = useDevice()
   const nav = useNavigate()
-  const playercard: string = `https://media.valorant-api.com/playercards/${user!.identity.PlayerCardID}/displayicon.png`
+  const playercard: string = `https://media.valorant-api.com/playercards/${user?.identity.PlayerCardID}/displayicon.png`
   const isActive: boolean = useLocation().pathname == page.href
   const fabSize: number = size ?? 60
 
