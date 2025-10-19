@@ -16,7 +16,7 @@ function PartyPlayerCard({member, decreaseWidth = 0}: Props) {
   return (
     <Box
       className="pc-wrapper"
-      style={{width: `${width}px`, height: width / (268 / 640), opacity: member ? 1 : 1/3}}
+      style={{width: `${width}px`, aspectRatio: 268 / 640, opacity: member ? 1 : 1/3}}
       aria-label="player-card"
     >
       <Box className="pc-card">
