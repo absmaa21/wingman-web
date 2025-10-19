@@ -20,6 +20,7 @@ export function useGameState(user: User | undefined, isFocused: boolean = true):
     queryKey: ['val-session'],
     queryFn: () => ValApiWrapper<SessionResponse>({url: ValApiUrl.SESSION, user: user!}),
     refetchInterval: 1000 * fetchInterval,
+    retryDelay: 2000 * fetchInterval,
     enabled: user && isFocused,
   })
 
