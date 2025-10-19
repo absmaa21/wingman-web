@@ -11,12 +11,13 @@ interface Props {
   textStyle?: CSSProperties,
 }
 
-function PlayerLevel({level, width = 64, fontSize = 12, style, center, centerVertical, textStyle}: Props) {
+function PlayerLevel({level, width = 64, fontSize = 11, style, center, centerVertical, textStyle}: Props) {
 
   fontSize *= level > 999 ? 0.9 : 1
   const levelBorder = level < 20 ? 1 : (level >= 500 ? 500 : level - level % 20)
+  const height = width * 128 / 304
   const boxWrapper: CSSProperties | undefined = center || centerVertical ? {
-    ...style, transform: `translate(-${center ? (width / 2) : 0}px, -${(width * 128 / 304) / 2}px)`
+    ...style, transform: `translate(-${center ? (width / 2) : 0}px, -${height / 2}px)`
   } : style
 
   return (
@@ -29,7 +30,7 @@ function PlayerLevel({level, width = 64, fontSize = 12, style, center, centerVer
         variant={'body2'}
         style={{
           position: 'absolute', width: '100%', left: 0, textAlign: 'center',
-          fontSize, ...textStyle, transform: 'translate(0, 34%)', top: 0
+          fontSize, ...textStyle, top: height / 4
         }}
       >
         {level}
