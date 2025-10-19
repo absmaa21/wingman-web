@@ -109,7 +109,10 @@ export function UserProvider({children}: UserProviderProps) {
     setUser(undefined)
   }
 
-  useEffect(validateUser, [user])
+  useEffect(() => {
+    const validateInterval = setInterval(validateUser, 5000)
+    return () => clearInterval(validateInterval)
+  }, [user])
 
   return (
     <UserContext value={{user, extractInformationsFromUrl}}>
