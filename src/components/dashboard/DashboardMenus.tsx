@@ -6,6 +6,7 @@ import PartyPlayerCard from "./PartyPlayerCard/PartyPlayerCard.tsx";
 import {useEffect, useState} from "react";
 import type {PartyMember} from "../../types/valapi/data.ts";
 import PartyPlayerCardEmpty from "./PartyPlayerCard/PartyPlayerCardEmpty.tsx";
+import PartyPlayerItem from "./PartyPlayerItems.tsx";
 
 interface Props {
   user: User,
@@ -23,7 +24,7 @@ function DashboardMenus({user, compact = false}: Props) {
   })
   const isCompact = compact || members.length > 5
 
-  useEffect(() => {
+  function refreshMembers() {
     if (!PartyQuery.data) {
       setMembers([])
       return
@@ -55,16 +56,20 @@ function DashboardMenus({user, compact = false}: Props) {
     }
 
     setMembers(tempMembers)
-  }, [PartyQuery.data]);
+  }
+
+  useEffect(refreshMembers, [PartyQuery.data, isCompact]);
 
   return (
     <Container maxWidth={false} style={{padding: 0, paddingTop: 6}}>
-      <Box sx={{display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'center', alignItems: 'center'}}>
-        {members.map((m, i) => m ? (
+      <Box sx={{display: 'flex', flexDirection: compact ? 'column' : 'row', gap: 2, justifyContent: 'center', alignItems: 'center'}}>
+        {!isCompact && members.map((m, i) => m ? (
           <PartyPlayerCard key={`member-card-${i}`} member={m} decreaseWidth={[0,4].includes(i) ? 32 : [1,3].includes(i) ? 16 : 0}/>
         ) : (
           <PartyPlayerCardEmpty key={`member-card-${i}`} decreaseWidth={[0,4].includes(i) ? 32 : [1,3].includes(i) ? 16 : 0} />
         ))}
+
+        {isCompact && <PartyPlayerItem members={members} />}
       </Box>
     </Container>
   )
