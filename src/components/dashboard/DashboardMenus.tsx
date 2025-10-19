@@ -58,9 +58,9 @@ function DashboardMenus({user, compact = false}: Props) {
 
   return (
     <Container maxWidth={false} style={{padding: 0, paddingTop: 6}}>
-      <Box sx={{display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'center'}}>
+      <Box sx={{display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'center', alignItems: 'center'}}>
         {members.map((m, i) => (
-          <PartyPlayerCard member={m} decreaseWidth={[0,4].includes(i) ? 16 : [1,3].includes(i) ? 8 : 0}/>
+          <PartyPlayerCard member={m} decreaseWidth={[0,4].includes(i) ? 32 : [1,3].includes(i) ? 16 : 0}/>
         ))}
       </Box>
     </Container>
