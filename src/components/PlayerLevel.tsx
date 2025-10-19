@@ -22,7 +22,7 @@ function PlayerLevel({level, width = 64, fontSize = 11, style, center, centerVer
 
   return (
     <Box style={{...boxWrapper, lineHeight: 0}}>
-      <img src={`src/assets/level-borders/level${levelBorder}.png`} alt={`lvl-${level}`}
+      <img src={`./src/assets/level-borders/level${levelBorder}.png`} alt={`lvl-${level}`}
            style={{width, height: 'auto', aspectRatio: 304 / 128, alignSelf: 'center', objectFit: 'contain'}}
       />
 

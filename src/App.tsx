@@ -15,11 +15,12 @@ function App() {
         <Route path={'*'} element={<PageNotFound/>} />
         <Route index element={<Dashboard/>}/>
         <Route path={'/welcome'} element={<Introduction/>} />
-        <Route path={'/endpoint'} element={<Endpoint/>} />
         <Route path={'/val-auth'} element={<ValAuth/>}/>
-        <Route element={<ProtectedRoute/>}>
 
+        <Route element={<ProtectedRoute adminOnly />}>
+          <Route path={'/endpoint'} element={<Endpoint/>} />
         </Route>
+
       </Routes>
     </Layout>
   )

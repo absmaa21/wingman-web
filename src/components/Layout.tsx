@@ -40,7 +40,7 @@ function DesktopNavbar() {
       justifyContent: 'space-between',
       px: 2,
     }}>
-      <img src={"src/assets/icon.png"} alt={'wingman-logo'} onClick={() => nav('/')}
+      <img src={"./src/assets/icon.png"} alt={'wingman-logo'} onClick={() => nav('/')}
            style={{width: 48, height: 48, marginBottom: 'auto', marginTop: 'auto', cursor: 'pointer'}}
       />
 
