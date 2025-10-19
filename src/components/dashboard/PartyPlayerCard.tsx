@@ -2,6 +2,7 @@ import './PartyPlayerCard.css'
 import type {PartyMember} from "../../types/valapi/data.ts";
 import {Box, Typography} from "@mui/material";
 import useDevice from "../../hooks/useDevice.ts";
+import PlayerLevel from "../PlayerLevel.tsx";
 
 interface Props {
   member: PartyMember | null | undefined,
@@ -19,7 +20,7 @@ function PartyPlayerCard({member, decreaseWidth = 0}: Props) {
   return (
     <Box
       className="pc-wrapper"
-      style={{width, height, opacity: member ? 1 : 1/3}}
+      style={{width, height, opacity: member ? 1 : 1 / 3}}
       aria-label="player-card"
     >
       <Box className="pc-card">
@@ -38,6 +39,11 @@ function PartyPlayerCard({member, decreaseWidth = 0}: Props) {
           </Box>
         </>)}
       </Box>
+
+      {member && <PlayerLevel
+          level={member.PlayerIdentity.AccountLevel} centerVertical
+          style={{position: 'absolute', top: 0, width: '100%', textAlign: 'center', zIndex: 3}}
+      />}
     </Box>
   )
 }
