@@ -1,6 +1,6 @@
 import './PartyPlayerCard.css'
 import type {NameService, NameServiceResponse, PartyMember} from "../../types/valapi/data.ts";
-import {Box, Typography} from "@mui/material";
+import {Box, Tooltip, Typography} from "@mui/material";
 import PlayerLevel from "../PlayerLevel.tsx";
 import {useQuery} from "@tanstack/react-query";
 import {ValApiWrapper} from "../../backend/QueryHelpers.ts";
@@ -8,6 +8,7 @@ import {ValApiUrl} from "../../types/valapi/valapiurl.ts";
 import useUser from "../../hooks/useUser.ts";
 import {useEffect, useState} from "react";
 import PartyPlayerCardBase from "./PartyPlayerCardBase.tsx";
+import { Star } from "@mui/icons-material";
 
 interface Props {
   member: PartyMember,
@@ -48,12 +49,21 @@ function PartyPlayerCard({member, decreaseWidth = 0}: Props) {
       </Box>
 
       <Box className="pc-info">
+
         <Typography className="pc-status" variant={'caption'}>
           {member.IsReady ? 'Ready' : 'Not Ready'}
         </Typography>
-        <Typography className="pc-name" variant={'subtitle1'}>
-          {nameService?.GameName}
-        </Typography>
+
+        <Box className="pc-name" style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 4}}>
+          {member.IsOwner && <Tooltip title={'Party Owner'}>
+              <Star style={{fontSize: 16}} color={'warning'}/>
+          </Tooltip>}
+
+          <Typography variant={'body1'}>
+            {nameService?.GameName}
+          </Typography>
+        </Box>
+
       </Box>
     </PartyPlayerCardBase>
   )

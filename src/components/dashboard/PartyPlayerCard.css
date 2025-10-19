@@ -84,9 +84,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    padding: 8px;
-    background: var(--info-bg);
     text-align: center;
 }
 
@@ -101,11 +98,11 @@
 /* name bar look */
 .pc-name {
     color: #fff;
-    padding: 6px 14px;
-    border-radius: 6px;
     font-weight: 700;
-    min-width: 80%;
-    box-shadow: inset 0 -2px 0 rgba(0,0,0,0.06);
+    width: 100%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background: var(--info-bg);
 }
 
 /* subtitle text below name */
