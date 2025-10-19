@@ -1,11 +1,11 @@
 import './PartyPlayerCard.css'
-import type {NameService, NameServiceResponse, PartyMember} from "../../types/valapi/data.ts";
+import type {NameService, NameServiceResponse, PartyMember} from "../../../types/valapi/data.ts";
 import {Box, Tooltip, Typography} from "@mui/material";
-import PlayerLevel from "../PlayerLevel.tsx";
+import PlayerLevel from "../../PlayerLevel.tsx";
 import {useQuery} from "@tanstack/react-query";
-import {ValApiWrapper} from "../../backend/QueryHelpers.ts";
-import {ValApiUrl} from "../../types/valapi/valapiurl.ts";
-import useUser from "../../hooks/useUser.ts";
+import {ValApiWrapper} from "../../../backend/QueryHelpers.ts";
+import {ValApiUrl} from "../../../types/valapi/valapiurl.ts";
+import useUser from "../../../hooks/useUser.ts";
 import {useEffect, useState} from "react";
 import PartyPlayerCardBase from "./PartyPlayerCardBase.tsx";
 import { Star } from "@mui/icons-material";

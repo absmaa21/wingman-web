@@ -2,10 +2,10 @@ import type {User} from "../../types/User.ts";
 import {Box, Container} from "@mui/material";
 import {useQuery} from "@tanstack/react-query";
 import {FetchParty} from "../../backend/DataQueries.ts";
-import PartyPlayerCard from "./PartyPlayerCard.tsx";
+import PartyPlayerCard from "./PartyPlayerCard/PartyPlayerCard.tsx";
 import {useEffect, useState} from "react";
 import type {PartyMember} from "../../types/valapi/data.ts";
-import PartyPlayerCardEmpty from "./PartyPlayerCardEmpty.tsx";
+import PartyPlayerCardEmpty from "./PartyPlayerCard/PartyPlayerCardEmpty.tsx";
 
 interface Props {
   user: User,

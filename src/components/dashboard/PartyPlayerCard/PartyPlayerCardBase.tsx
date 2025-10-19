@@ -1,6 +1,6 @@
 import './PartyPlayerCard.css'
 import {Box} from "@mui/material";
-import useDevice from "../../hooks/useDevice.ts";
+import useDevice from "../../../hooks/useDevice.ts";
 import type {CSSProperties, ReactNode} from "react";
 
 interface Props {
