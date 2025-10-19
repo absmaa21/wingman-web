@@ -1,39 +1,19 @@
 import './PartyPlayerCard.css'
-import type {NameService, NameServiceResponse, PartyMember} from "../../../types/valapi/data.ts";
+import type {NameServiceResponse, PartyMember} from "../../../types/valapi/data.ts";
 import {Box, Tooltip, Typography} from "@mui/material";
 import PlayerLevel from "../../PlayerLevel.tsx";
-import {useQuery} from "@tanstack/react-query";
-import {ValApiWrapper} from "../../../backend/QueryHelpers.ts";
-import {ValApiUrl} from "../../../types/valapi/valapiurl.ts";
-import useUser from "../../../hooks/useUser.ts";
-import {useEffect, useState} from "react";
 import PartyPlayerCardBase from "./PartyPlayerCardBase.tsx";
 import { Star } from "@mui/icons-material";
 
 interface Props {
   member: PartyMember,
   decreaseWidth?: number,
+  nameService: NameServiceResponse,
 }
 
-function PartyPlayerCard({member, decreaseWidth = 0}: Props) {
+function PartyPlayerCard({member, decreaseWidth = 0, nameService}: Props) {
 
-  const {user} = useUser()
   const imgSrc = `https://media.valorant-api.com/playercards/${member.PlayerIdentity.PlayerCardID}/largeart.png`
-  const [nameService, setNameService] = useState<NameService>()
-
-  const NameServiceQuery = useQuery({
-    queryKey: ['name-service', member.Subject],
-    queryFn: () => ValApiWrapper<NameServiceResponse>({
-      url: ValApiUrl.NAME_SERVICE, user,
-      custom_options: {method: 'PUT', body: JSON.stringify([member.Subject])}
-    }),
-    enabled: !!user,
-  })
-
-  useEffect(() => {
-    if (member && NameServiceQuery.isSuccess)
-      setNameService(NameServiceQuery.data.find(n => n.Subject == member.Subject))
-  }, [NameServiceQuery.data]);
 
   return (
     <PartyPlayerCardBase decreaseWidth={decreaseWidth} extra={(
@@ -60,7 +40,7 @@ function PartyPlayerCard({member, decreaseWidth = 0}: Props) {
           </Tooltip>}
 
           <Typography variant={'body1'}>
-            {nameService?.GameName}
+            {nameService.find(n => n.Subject == member.Subject)?.GameName}
           </Typography>
         </Box>
 

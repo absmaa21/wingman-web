@@ -8,24 +8,13 @@ import {
   TableRow,
 } from "@mui/material";
 import type {NameServiceResponse, PartyMember} from "../../types/valapi/data.ts";
-import useUser from "../../hooks/useUser.ts";
-import {useQuery} from "@tanstack/react-query";
-import {ValApiWrapper} from "../../backend/QueryHelpers.ts";
-import {ValApiUrl} from "../../types/valapi/valapiurl.ts";
+
 interface Props {
   members: PartyMember[],
+  nameService: NameServiceResponse,
 }
 
-function PartyPlayerItems({members}: Props) {
-
-  const {user} = useUser()
-  const NameServiceQuery = useQuery({
-    queryKey: ['name-service'],
-    queryFn: () => ValApiWrapper<NameServiceResponse>({
-      url: ValApiUrl.NAME_SERVICE, user,
-      custom_options: {method: 'PUT', body: JSON.stringify(members.map(m => m && m.Subject))}
-    }),
-  })
+function PartyPlayerItems({members, nameService}: Props) {
 
   return (
     <TableContainer component={Paper}>
@@ -49,7 +38,7 @@ function PartyPlayerItems({members}: Props) {
                 />
               </TableCell>
               <TableCell>
-                {NameServiceQuery.data && NameServiceQuery.data.find(n => n.Subject == m.Subject)?.GameName}
+                {nameService.find(n => n.Subject == m.Subject)?.GameName}
               </TableCell>
               <TableCell>{m.PlayerIdentity.AccountLevel}</TableCell>
               <TableCell>
