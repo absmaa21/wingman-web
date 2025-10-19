@@ -93,7 +93,7 @@ function Layout({children}: { children: ReactNode }) {
 
       <Container
         component={'main'} maxWidth={false}
-        sx={{flexGrow: 1, bgcolor: 'background.default', p: 3}}
+        sx={{flexGrow: 1, bgcolor: 'background.default', p: 2}}
       >
         {children}
       </Container>

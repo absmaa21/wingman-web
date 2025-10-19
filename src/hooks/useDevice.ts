@@ -2,9 +2,11 @@ import {useEffect, useState} from "react";
 
 function UseDevice() {
   const [width, setWidth] = useState<number>(window.innerWidth)
+  const [height, setHeight] = useState<number>(window.innerHeight)
 
   function handleWindowSizeChange() {
     setWidth(window.innerWidth)
+    setHeight(window.innerHeight)
   }
 
   useEffect(() => {
@@ -12,7 +14,7 @@ function UseDevice() {
     return () => window.removeEventListener('resize', handleWindowSizeChange)
   }, []);
 
-  return {isMobile: width <= 768}
+  return {width, height, isMobile: width <= 768}
 }
 
 export default UseDevice;

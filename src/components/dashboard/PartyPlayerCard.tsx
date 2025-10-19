@@ -1,6 +1,7 @@
 import './PartyPlayerCard.css'
 import type {PartyMember} from "../../types/valapi/data.ts";
 import {Box, Typography} from "@mui/material";
+import useDevice from "../../hooks/useDevice.ts";
 
 interface Props {
   member: PartyMember | null | undefined,
@@ -10,13 +11,15 @@ interface Props {
 
 function PartyPlayerCard({member, decreaseWidth = 0}: Props) {
 
+  const device = useDevice()
   const imgSrc = `https://media.valorant-api.com/playercards/${member?.PlayerIdentity.PlayerCardID}/largeart.png`
-  const width = Math.min(window.innerWidth / 5, 268) - decreaseWidth
+  const width = Math.min(device.width / 5, 268) - decreaseWidth
+  const height = width * 640 / 268
 
   return (
     <Box
       className="pc-wrapper"
-      style={{width: `${width}px`, aspectRatio: 268 / 640, opacity: member ? 1 : 1/3}}
+      style={{width, height, opacity: member ? 1 : 1/3}}
       aria-label="player-card"
     >
       <Box className="pc-card">

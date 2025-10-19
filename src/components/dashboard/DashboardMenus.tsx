@@ -57,9 +57,11 @@ function DashboardMenus({user, compact = false}: Props) {
   }, [PartyQuery.data]);
 
   return (
-    <Container maxWidth={false}>
+    <Container maxWidth={false} style={{padding: 0}}>
       <Box sx={{display: 'flex', flexDirection: 'row', gap: 2, justifyContent: 'center'}}>
-        {members.map((m, i) => <PartyPlayerCard member={m} decreaseWidth={[0,4].includes(i) ? 16 : [1,3].includes(i) ? 8 : 0}/>)}
+        {members.map((m, i) => (
+          <PartyPlayerCard member={m} decreaseWidth={[0,4].includes(i) ? 16 : [1,3].includes(i) ? 8 : 0}/>
+        ))}
       </Box>
     </Container>
   )
