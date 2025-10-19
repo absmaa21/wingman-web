@@ -1,5 +1,5 @@
 import type {User} from "../../types/User.ts";
-import {Box, Container} from "@mui/material";
+import {Box, Container, Typography} from "@mui/material";
 import {useQuery} from "@tanstack/react-query";
 import {FetchParty} from "../../backend/DataQueries.ts";
 import PartyPlayerCard from "./PartyPlayerCard/PartyPlayerCard.tsx";
@@ -22,7 +22,7 @@ function DashboardMenus({user, compact = false}: Props) {
     queryKey: ['party', user.puuid],
     queryFn: () => FetchParty(user),
     staleTime: 5 * 1000,
-    retryDelay: 60000,
+    retryDelay: 30000,
   })
   const NameServiceQuery = useQuery({
     queryKey: ['name-service', members],
@@ -30,6 +30,7 @@ function DashboardMenus({user, compact = false}: Props) {
       url: ValApiUrl.NAME_SERVICE, user,
       custom_options: {method: 'PUT', body: JSON.stringify(members.map(m => m && m.Subject))}
     }),
+    enabled: members.map(m => m && m.Subject).length > 0
   })
   const isCompact = compact || members.length > 5
 
@@ -68,6 +69,21 @@ function DashboardMenus({user, compact = false}: Props) {
   }
 
   useEffect(refreshMembers, [PartyQuery.data, isCompact]);
+
+  // This occurs if the Session State is MENUS but the PartyQuery returns an error.
+  if (!PartyQuery.isSuccess) return (
+    <Container sx={{textAlign: 'center'}}>
+      <Typography variant={'h3'}>
+        No active party found!
+      </Typography>
+      <Typography variant={'subtitle1'}>
+        This usually happens if you game is not closed correctly.
+      </Typography>
+      <Typography variant={'caption'} color={'error'}>
+          {PartyQuery.error?.stack}
+      </Typography>
+    </Container>
+  )
 
   return (
     <Container maxWidth={false} style={{padding: 0, paddingTop: 6}}>

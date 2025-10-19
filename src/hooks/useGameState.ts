@@ -14,27 +14,35 @@ interface Session {
 export function useGameState(user: User | undefined, isFocused: boolean = true): Session {
 
   const [sessionState, setSessionState] = useState<SessionState | string>(SessionState.CLOSED)
-  const [fetchMultiplier, setFetchMultiplier] = useState<number>(1)
+  const [fetchInterval, setFetchInterval] = useState<number>(5)
 
   const SessionQuery = useQuery({
     queryKey: ['val-session'],
     queryFn: () => ValApiWrapper<SessionResponse>({url: ValApiUrl.SESSION, user: user!}),
-    refetchInterval: 1000 * 60 * fetchMultiplier,
+    refetchInterval: 1000 * fetchInterval,
     enabled: user && isFocused,
   })
 
   useEffect(() => {
     if (SessionQuery.isSuccess) {
-      console.debug(`Session State changed to: ${SessionQuery.data.loopState}`)
-      setSessionState(SessionQuery.data.loopState)
+      console.log(`Session State changed to: ${SessionQuery.data.loopState} [cxnState: ${SessionQuery.data.cxnState}]`)
+      if (SessionQuery.data.cxnState == SessionState.CONNECTED)
+        setSessionState(SessionQuery.data.loopState)
+      else
+        setSessionState(SessionQuery.data.cxnState)
 
       if (!Object.values(SessionState).includes(SessionQuery.data.loopState as SessionState)) {
-        console.debug(`Unknown Session State: ${SessionQuery.data.loopState} [cxnState: ${SessionQuery.data.cxnState}]`)
+        console.warn(`Unknown Session State: ${SessionQuery.data.loopState} [cxnState: ${SessionQuery.data.cxnState}]`)
       }
 
-      if (SessionQuery.data.loopState == SessionState.INGAME) setFetchMultiplier(5)
-      else setFetchMultiplier(1)
+      if (SessionQuery.data.loopState == SessionState.INGAME) setFetchInterval(60)
+      else if (SessionQuery.data.loopState == SessionState.CLOSED) setFetchInterval(10)
+      else setFetchInterval(5)
+
+      return
     }
+
+    setSessionState(SessionState.CLOSED)
   }, [SessionQuery.data]);
 
   return {state: sessionState, refetch: SessionQuery.refetch}

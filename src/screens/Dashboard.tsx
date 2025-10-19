@@ -5,6 +5,7 @@ import {Typography} from "@mui/material";
 import {SessionState} from "../types/constants/Enums.ts";
 import DashboardMenus from "../components/dashboard/DashboardMenus.tsx";
 import useDevice from "../hooks/useDevice.ts";
+import DashboardPreGame from "../components/dashboard/DashboardPreGame.tsx";
 
 function Dashboard() {
 
@@ -14,23 +15,11 @@ function Dashboard() {
 
   if (!user) return <Introduction/>
 
-  /*
-  const PreGamePlayerQuery = useQuery({
-    queryKey: ['val-pre-game-player'],
-    queryFn: () => ValApiWrapper({url: ValApiUrl.PRE_GAME_PLAYER, user}),
-    retryDelay: 30 * 1000, retry: true, enabled: false
-  })
-  const PreGameQuery = useQuery({
-    queryKey: ['val-pre-game'],
-    queryFn: () => ValApiWrapper({
-      url: ValApiUrl.PRE_GAME_MATCH, user,
-    }),
-    enabled: PreGamePlayerQuery.isSuccess,
-  })
-   */
-
   if (Session.state == SessionState.MENUS)
     return <DashboardMenus user={user} compact={isMobile} />
+
+  if (Session.state == SessionState.PREGAME)
+    return <DashboardPreGame user={user} />
 
   return (
     <Typography>
