@@ -13,7 +13,7 @@ export function defaultHeaders(user: User): HeadersInit {
 
 interface ValApiWrapperOptions {
   url: ValApiUrl | string,
-  user: User,
+  user?: User,
   custom_options?: RequestInit,
   name?: string,
   use_min_header?: boolean,
@@ -21,6 +21,8 @@ interface ValApiWrapperOptions {
 }
 
 export async function ValApiWrapper<T>({url, user, custom_options, name, use_min_header, custom_params}: ValApiWrapperOptions) {
+  if (!user) throw new Error('User cannot be undefined!')
+
   const newUrl = replaceUrlValues(url, user, custom_params)
   if (!newUrl) throw Error('Sanitizing Url has failed, skip fetch.')
   url = newUrl
@@ -34,7 +36,7 @@ export async function ValApiWrapper<T>({url, user, custom_options, name, use_min
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${user.access_token}`,
     } : custom_options?.headers ?? defaultHeaders(user),
-    body: custom_options?.method === 'POST' ? custom_options?.body : null
+    body: ['POST', 'PUT'].includes(custom_options?.method ?? '') ? custom_options?.body : null
   }
 
   console.debug(`Trying to fetch ${label}`)

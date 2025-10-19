@@ -1442,12 +1442,14 @@ export type CompetitiveUpdatesResponse = {
   }[];
 };
 
-export type NameServiceResponse = {
+export type NameService = {
   DisplayName: string;
   Subject: string;
   GameName: string;
   TagLine: string;
-}[];
+}
+
+export type NameServiceResponse = NameService[];
 
 export type PartyPlayerResponse = {
   Subject: string;

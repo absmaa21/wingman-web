@@ -1,50 +1,61 @@
 import './PartyPlayerCard.css'
-import type {PartyMember} from "../../types/valapi/data.ts";
+import type {NameService, NameServiceResponse, PartyMember} from "../../types/valapi/data.ts";
 import {Box, Typography} from "@mui/material";
-import useDevice from "../../hooks/useDevice.ts";
 import PlayerLevel from "../PlayerLevel.tsx";
+import {useQuery} from "@tanstack/react-query";
+import {ValApiWrapper} from "../../backend/QueryHelpers.ts";
+import {ValApiUrl} from "../../types/valapi/valapiurl.ts";
+import useUser from "../../hooks/useUser.ts";
+import {useEffect, useState} from "react";
+import PartyPlayerCardBase from "./PartyPlayerCardBase.tsx";
 
 interface Props {
-  member: PartyMember | null | undefined,
-  gap?: number,
+  member: PartyMember,
   decreaseWidth?: number,
 }
 
 function PartyPlayerCard({member, decreaseWidth = 0}: Props) {
 
-  const device = useDevice()
-  const imgSrc = `https://media.valorant-api.com/playercards/${member?.PlayerIdentity.PlayerCardID}/largeart.png`
-  const width = Math.min(device.width / 5, 268) - decreaseWidth
-  const height = width * 640 / 268
+  const {user} = useUser()
+  const imgSrc = `https://media.valorant-api.com/playercards/${member.PlayerIdentity.PlayerCardID}/largeart.png`
+  const [nameService, setNameService] = useState<NameService>()
+
+  const NameServiceQuery = useQuery({
+    queryKey: ['name-service', member.Subject],
+    queryFn: () => ValApiWrapper<NameServiceResponse>({
+      url: ValApiUrl.NAME_SERVICE, user,
+      custom_options: {method: 'PUT', body: JSON.stringify([member.Subject])}
+    }),
+    enabled: !!user,
+  })
+
+  useEffect(() => {
+    if (member && NameServiceQuery.isSuccess)
+      setNameService(NameServiceQuery.data.find(n => n.Subject == member.Subject))
+  }, [NameServiceQuery.data]);
 
   return (
-    <Box
-      className="pc-wrapper"
-      style={{width, height, opacity: member ? 1 : 1 / 3}}
-      aria-label="player-card"
-    >
-      <Box className="pc-card">
-        {member && (<>
-          <Box className="pc-image">
-            <img src={imgSrc} alt="artwork"/>
-          </Box>
-
-          <Box className="pc-info">
-            <Typography className="pc-status" variant={'caption'}>
-              {member.IsReady ? 'Ready' : 'Not Ready'}
-            </Typography>
-            <Typography className="pc-name" variant={'subtitle1'}>
-              {member.IsOwner ? 'Owner' : ''}
-            </Typography>
-          </Box>
-        </>)}
-      </Box>
-
-      {member && <PlayerLevel
+    <PartyPlayerCardBase decreaseWidth={decreaseWidth} extra={(
+      <>
+        <PlayerLevel
           level={member.PlayerIdentity.AccountLevel} centerVertical
           style={{position: 'absolute', top: 0, width: '100%', textAlign: 'center', zIndex: 3}}
-      />}
-    </Box>
+        />
+      </>
+    )}>
+      <Box className="pc-image">
+        <img src={imgSrc} alt="player-card"/>
+      </Box>
+
+      <Box className="pc-info">
+        <Typography className="pc-status" variant={'caption'}>
+          {member.IsReady ? 'Ready' : 'Not Ready'}
+        </Typography>
+        <Typography className="pc-name" variant={'subtitle1'}>
+          {nameService?.GameName}
+        </Typography>
+      </Box>
+    </PartyPlayerCardBase>
   )
 }
 

@@ -27,6 +27,10 @@
     pointer-events: none;
 }
 
+.pc-wrapper:hover {
+    cursor: pointer;
+}
+
 /* fill spike: sits on top of the border spike, same color as card background */
 .pc-wrapper::after {
     content: "";
