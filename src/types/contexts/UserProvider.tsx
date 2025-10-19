@@ -110,6 +110,7 @@ export function UserProvider({children}: UserProviderProps) {
   }
 
   useEffect(() => {
+    validateUser()
     const validateInterval = setInterval(validateUser, 5000)
     return () => clearInterval(validateInterval)
   }, [user])
